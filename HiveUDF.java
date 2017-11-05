@@ -1,16 +1,22 @@
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class HiveUDF 
-{
-   public static String hash256(String data) throws NoSuchAlgorithmException {
-        MessageDigest md = MessageDigest.getInstance("SHA-256");
-        md.update(data.getBytes());
-        return bytesToHex(md.digest());
-    }
-    public static String bytesToHex(byte[] bytes) {
-        StringBuffer result = new StringBuffer();
-        for (byte byt : bytes) result.append(Integer.toString((byt & 0xff) + 0x100, 16).substring(1));
-        return result.toString();
-    }
+import org.apache.hadoop.hive.ql.exec.UDF;
+import org.apache.hadoop.io.Text;
+
+public class HiveUDF extends UDF {
+
+	private Text result = new Text();
+	public Text evaluate(Text str) {
+		if (str == null) {
+			return null;
+		}
+		try {
+			result.set(Sha256.hash256(str.toString()));
+		} catch (NoSuchAlgorithmException e) {
+			System.out.println("Exception : Some problem in hashing ..");
+			e.printStackTrace();
+		}
+		return result;
+	}
 }
+
