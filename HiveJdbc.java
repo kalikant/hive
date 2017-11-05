@@ -1,3 +1,7 @@
+/*
+this class helps to connect to hive using JDBC
+*/
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
