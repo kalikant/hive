@@ -1,5 +1,20 @@
 -- passing param value to hive using -hivevar
 hive -hivevar STAGE_DB=${STAGING_DB} -hivevar HDFS_BASE_PATH=${HDFS_BASE_PATH} -f $ENV_PATH/appl/hql/create_metadata.hql
+-- inside hql file use variable like below
+create '${STAGE_DB}'.table abc(
+col1 string,
+col2 string
+)
+location '${HDFS_BASE_PATH}' ;
+
+# calling hive query in silent mode
+hive -S -e "
+set hive.execution.engine=mr;
+set hive.auto.convert.join=false;
+set mapreduce.job.reduces=25;
+msck repair table ${hive_db}.abc_tmp_tbl;
+msck repair table ${hive_db}.xyz_abc_tbl;
+"
 
 -- data loading into hive steps
 -- loading data into staging table
