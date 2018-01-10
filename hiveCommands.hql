@@ -26,6 +26,7 @@ select count(*) from hive_ab.hive_stg_tbl;
 
 -- load data into actual landing table
 insert overwrite table hive_ab.hive_lnd_tbl partition(date) select * from hive_ab.hive_stg_tbl;
+insert overwrite table hive_ab.hive_lnd_tbl partition(date='2017-12-12') select * from hive_ab.hive_stg_tbl;
 
 -- if data file coming with different partition column name and warehouse loading partition column is different
 insert overwrite table hive_ab.hive_lnd_tbl partition(date=business_date) select * from hive_ab.hive_stg_tbl;
@@ -33,3 +34,9 @@ insert overwrite table hive_ab.hive_lnd_tbl partition(date=business_date) select
 -- verify row count in actual landing table
 select date,count(*) from hive_ab.hive_lnd_tbl group by date;  
 select date,count(*) from hive_ab.hive_lnd_tbl where date between '2017_08_01' and '2017_08_31' group by date;  
+
+-- adding permanent function
+DROP FUNCTION IF EXISTS database.sha_256;
+create function database.sha_256 AS 'ogr.sha_2.Sha256' using jar 'hdfs://XXXXXX/user/sha-2-0.0.1-SNAPSHOT.jar';
+RELOAD function database.sha_256;
+
