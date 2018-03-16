@@ -1,0 +1,42 @@
+sudo apt-get install mysql-server
+sudo apt-get install libmysql-java
+cp /usr/share/java/mysql-connector-java.jar $HIVE_HOME/lib/mysql-connector-java.jar
+$ mysql -u root -p
+Enter password:
+mysql> CREATE DATABASE metastore;
+mysql> USE metastore;
+mysql> SOURCE $HIVE_HOME/scripts/metastore/upgrade/mysql/hive-schema-2.3.0.mysql.sql;
+mysql> CREATE USER 'hiveuser'@'%' IDENTIFIED BY 'hivepassword'; 
+mysql> GRANT all on *.* to 'hiveuser'@localhost identified by 'hivepassword';
+mysql>  flush privileges;
+
+
+Create hive-site.xml in $HIVE_HOME/conf
+
+<configuration>
+   <property>
+      <name>javax.jdo.option.ConnectionURL</name>
+      <value>jdbc:mysql://localhost/metastore?createDatabaseIfNotExist=true</value>
+      <description>metadata is stored in a MySQL server</description>
+   </property>
+   <property>
+      <name>javax.jdo.option.ConnectionDriverName</name>
+      <value>com.mysql.jdbc.Driver</value>
+      <description>MySQL JDBC driver class</description>
+   </property>
+   <property>
+      <name>javax.jdo.option.ConnectionUserName</name>
+      <value>hiveuser</value>
+      <description>user name for connecting to mysql server</description>
+   </property>
+   <property>
+      <name>javax.jdo.option.ConnectionPassword</name>
+      <value>hivepassword</value>
+      <description>password for connecting to mysql server</description>
+   </property>
+</configuration>
+
+-- check your metastore
+mysql> use metastore;
+mysql> show tables ;
+mysql> select * from TBLS;
