@@ -1,0 +1,18 @@
+-- Hive Env Variables Setting
+set hive.vectorized.execution.enabled=true;
+set hive.vectorized.execution.reduce.enabled=true;
+set hive.exec.parallel=true;
+set hive.auto.convert.join=true;
+set hive.cbo.enable=true;
+set hive.compute.query.using.stats=true;
+set hive.stats.fetch.column.stats=true;
+set hive.stats.fetch.partition.stats=true;
+set hive.exec.compress.output=true;
+set hive.exec.compress.intermediate=true;
+set hive.tez.container.size=10240;
+set hive.tez.java.opts=-Xmx8192m;
+set tez.runtime.io.sort.mb=4096;
+set tez.runtime.unordered.output.buffer.size-mb=1024;
+set hive.exec.dynamic.partition=true;
+set hive.exec.dynamic.partition.mode=nonstrict;
+set yarn.nodemanager.vmem-check-enabled=false;
