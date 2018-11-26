@@ -22,7 +22,7 @@ where b.rnk=1
 select grouping_col1,grouping_col2,count(*) as cnt, 
 rank() over (partition by grouping_col1 order by cnt desc) as rnk
 from database.branch_table
-where between rnk 1  and 10 -- for top 10 records
+where rnk between 1  and 10 -- for top 10 records
 group by grouping_col1,grouping_col2,cnt
 
 -- this to replacement of oracle minus query
